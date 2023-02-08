@@ -1,0 +1,78 @@
+version: "3.10"
+
+services:
+
+  gp-mysql:
+    image: mysql
+    container_name: gp-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_USERNAME: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: q1_backend
+      MYSQL_USER: q1
+      MYSQL_PASSWORD: verysecurepassword
+    ports:
+      - "9906:3306"
+    volumes:
+       - ./gp-mysql:/var/lib/mysql
+    networks:
+      - gp-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "gp-mysql"]
+      timeout: 5s
+      retries: 10
+
+  q1-backend:
+    image: chlai/q1-backend:1.0.0
+    container_name: gp-q1-backend
+    restart: unless-stopped
+    environment:
+      APP_NAME: "Q1 Backend"
+      DB_USERNAME: "q1"
+      DB_PASSWORD: "verysecurepassword"
+      DB_HOST: "gp-mysql"
+      DB_PORT: "3306"
+      DB: "q1_backend"
+    ports:
+        - "9901:9000"
+    depends_on:
+      gp-mysql:
+        condition: service_healthy
+    volumes:
+      - ./logs:/server/core/logs
+    networks:
+      - gp-network
+
+  q1-frontend:
+    image: chlai/q1-frontend:1.0.0
+    container_name: gp-q1-frontend
+    restart: unless-stopped
+    ports:
+        - "9900:3000"
+    environment:
+      NODE_ENV: development
+      REACT_APP_SERVER_URL: "http://192.168.1.111:9901/api/v1"
+    volumes:
+      - ./.env:/app/.env
+    depends_on:
+      - q1-backend
+    networks:
+      - gp-network
+    command: "npm run-script up"
+
+  q2-frontend:
+    image: chlai/q2-frontend:1.0.0
+    container_name: gp-q2-frontend
+    restart: unless-stopped
+    ports:
+        - "9902:3000"
+    networks:
+      - gp-network
+
+networks:
+  gp-network:
+    external: true
+
+

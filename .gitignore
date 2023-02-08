@@ -1,0 +1,11 @@
+docker-images
+gp-mysql
+
+q1/backend/build
+q1/backend/core/logs/
+
+q1/frontend/build
+q1/frontend/node_modules
+
+q2/frontend/build
+q2/frontend/node_modules

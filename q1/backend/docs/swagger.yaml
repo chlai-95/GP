@@ -1,0 +1,253 @@
+basePath: /api
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  models.ApiResponse:
+    properties:
+      hits: {}
+      metadata:
+        $ref: '#/definitions/models.RequestMetadata'
+    type: object
+  models.RequestMetadata:
+    properties:
+      count:
+        type: integer
+      message: {}
+      query: {}
+      success:
+        type: boolean
+      total:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      address_1:
+        type: string
+      address_2:
+        type: string
+      address_3:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone:
+        type: string
+      profile_pic:
+        items:
+          type: integer
+        type: array
+      updatedAt:
+        type: string
+    required:
+    - address_1
+    - email
+    - name
+    - phone
+    type: object
+  models.UserRequest:
+    properties:
+      address_1:
+        type: string
+      address_2:
+        type: string
+      address_3:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      profile_pic:
+        items:
+          type: integer
+        type: array
+    required:
+    - address_1
+    - email
+    - name
+    - phone
+    type: object
+info:
+  contact:
+    email: cheehoong1995@gmail.com
+    name: CH Lai
+  description: Backend Service for GP Developer Testing - Q1
+  title: CHLai - Developer Testing Q1
+  version: 1.0.0
+paths:
+  /v1/user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user details
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/models.ApiResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ApiResponse'
+      summary: Delete user details
+      tags:
+      - User
+    get:
+      description: Get user details by Id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.ApiResponse'
+            - properties:
+                hits:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ApiResponse'
+      summary: Get user details
+      tags:
+      - User
+    patch:
+      consumes:
+      - application/json
+      description: Update user details
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update user details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.ApiResponse'
+            - properties:
+                hits:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ApiResponse'
+      summary: Update user details
+      tags:
+      - User
+  /v1/user/list:
+    get:
+      description: Get all users
+      parameters:
+      - in: query
+        name: limit
+        type: integer
+      - in: query
+        name: orderBy
+        type: string
+      - in: query
+        name: skip
+        type: integer
+      - in: query
+        name: sortOrder
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.ApiResponse'
+            - properties:
+                hits:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ApiResponse'
+      summary: Get all users
+      tags:
+      - User
+  /v1/user/new:
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: Create new user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.ApiResponse'
+            - properties:
+                hits:
+                  items:
+                    $ref: '#/definitions/models.User'
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ApiResponse'
+      summary: Create new user
+      tags:
+      - User
+swagger: "2.0"

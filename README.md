@@ -30,7 +30,9 @@
 
 4. **q2-frontend** is accessible on *`http://localhost:9902`*, kindly change accordingly if made any changes on either **`HOST`** or **`PORT`**
 
---
+
+---
+
 
 ### Non-Docker Method
 
@@ -40,7 +42,7 @@
 > `go mod download`
 
 2. Run command to build go package
-> `go build -o build/serve` // notes that *build/serve* can be renamed to something else, or remove `-o build/serve` to let go handle by default
+> `go build -o build/serve` // notes that *build/serve* can be rename to something else, or remove `-o build/serve` to let Go handle by default
 
 3. Serve up the package
 > `./build/serve` // just run `./` following by the build output name will do
@@ -65,6 +67,7 @@
 10. **q1-frontend** is accessible on *`http://localhost:9900`*, kindly change accordingly if made any changes on either **`HOST`** or **`PORT`**
 
 
+
 **For Q2**
 
 1. Go into `q1-frontend` and run command below
@@ -84,6 +87,8 @@
 
 6. **q2-frontend** is accessible on *`http://localhost:3000`*, kindly change accordingly if made any changes on either **`HOST`** or **`PORT`**
 
---
 
-> ## :warning: There is no custom PORT configuration implemented in manual serve method by the time. Kindly aware that serving both Q1 frontend and Q2 frontend might facing PORT conflict issue
+---
+
+
+> ## :warning: There is no custom PORT configuration implemented in manual serve method by the time. Kindly aware that serving both Q1 frontend and Q2 frontend might facing conflicts
